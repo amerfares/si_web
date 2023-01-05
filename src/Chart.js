@@ -1,11 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as am5 from "@amcharts/amcharts5";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow"
 import * as am5map from "@amcharts/amcharts5/map";
+import am5geodata_data_countries from "@amcharts/amcharts5-geodata/data/countries2";
 
-function Chart() {
+
+function Chart(params) {
   const rootRef = useRef();
+  const [country, setCountry] = useState("");
+  const [capital, setCapital] = useState("");
+  const [president, setPresident] = useState("");
+  const [officialLanguage, setOfficialLanguage] = useState("");
+  const [population, setPopulation] = useState("");
+  const [currency, setCurrency] = useState("");
 
   useEffect(() => {
     if (!rootRef.current) {
@@ -62,11 +70,17 @@ function Chart() {
         
         polygonSeries.mapPolygons.template.on("active", function(active, target) {
             if (previousPolygon && previousPolygon !== target) {
-            previousPolygon.set("active", false);
+                previousPolygon.set("active", false);
             }
             if (target.get("active")) {
-            selectCountry(target.dataItem.get("id"));
-            console.log(target.dataItem.get("id"))
+                selectCountry(target.dataItem.get("id"));
+                console.log(params.data, am5geodata_data_countries)
+                setCountry(am5geodata_data_countries[target.dataItem.get("id")].country)
+                setCapital(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].capital)
+                setPresident(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].president)
+                setOfficialLanguage(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].officialLanguage)
+                setPopulation(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].population)
+                setCurrency(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].currency)
             }
             previousPolygon = target;
         });
@@ -87,7 +101,28 @@ function Chart() {
         });
   }, []);
 
-  return <></>;
+  return <>
+    <div id="container">
+        <div id="country">
+            <p>Country: {country}</p>
+        </div>
+        <div id="capital">
+            <p>Capital: {capital}</p>
+        </div>
+        <div id="president">
+            <p>Head of the government: {president}</p>
+        </div>
+        <div id="officialLanguage">
+            <p>Official Language: {officialLanguage}</p>
+        </div>
+        <div id="population">
+            <p>Population: {population}</p>
+        </div>
+        <div id="currency">
+            <p>Currency: {currency}</p>
+        </div>
+    </div>
+    </>;
 }
 
 export default Chart;

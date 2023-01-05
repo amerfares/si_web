@@ -28,8 +28,7 @@ WHERE
 
 function App() { 
 
-  function test(res) {
-    console.log(res.results.bindings)
+  function dictionnaire(res) {
     // Déclaration du dictionnaire qui va contenir les informations
     const countries = {};
     // Parcours des résultats de la requête
@@ -69,14 +68,14 @@ function App() {
     return countries;
   }
      
-
   const [data, setData] = useState();
+
   async function requete () {
     const fullUrl = endpointUrl + '?query=' + encodeURIComponent( sparqlQuery );
     const headers = { 'Accept': 'application/sparql-results+json' };
     const response = await fetch(fullUrl, { headers });
     const data_aw = await response.json();
-    var tab = test(data_aw)   
+    var tab = dictionnaire(data_aw)   
     setData(tab);    
  
     console.log(tab)
@@ -89,7 +88,7 @@ function App() {
 
 return (
 
-  <div id="chartDiv"><Chart/></div>
+  <div id="chartDiv">{data ? <Chart data={data}/>:'Loading...'}</div>
 );
   }
 
