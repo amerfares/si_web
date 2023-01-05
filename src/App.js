@@ -29,8 +29,9 @@ WHERE
 function App() { 
 
   function test(res) {
+    console.log(res.results.bindings)
     // Déclaration du dictionnaire qui va contenir les informations
-  const countries = {};
+    const countries = {};
     // Parcours des résultats de la requête
     for (const result of res.results.bindings) {
       // Récupération du nom du pays
@@ -38,27 +39,36 @@ function App() {
   
       // Vérification si le pays existe déjà dans le dictionnaire
       if (countries[countryName]) {
-        // Si oui, ajout des informations dans le tableau correspondant
-        countries[countryName].population.push(result.population.value);
-        countries[countryName].area.push(result.area.value);
-        countries[countryName].capital.push(result.capitalLabel.value);
-        countries[countryName].officialLanguage.push(result.officialLanguage.value);
-        countries[countryName].president.push(result.president.value);
-        countries[countryName].currency.push(result.currency.value);
+        // Si oui, ajout des informations dans les tableaux correspondants
+        // en vérifiant si la valeur n'existe pas déjà
+        if (!countries[countryName].population.includes(result.population.value)) {
+          countries[countryName].population.push(result.population.value);
+        }
+        if (!countries[countryName].capital.includes(result.capitalLabel.value)) {
+          countries[countryName].capital.push(result.capitalLabel.value);
+        }
+        if (!countries[countryName].officialLanguage.includes(result.officialLanguageLabel.value)) {
+          countries[countryName].officialLanguage.push(result.officialLanguageLabel.value);
+        }
+        if (!countries[countryName].president.includes(result.presidentLabel.value)) {
+          countries[countryName].president.push(result.presidentLabel.value);
+        }if (!countries[countryName].currency.includes(result.currencyLabel.value)) {
+          countries[countryName].currency.push(result.currencyLabel.value);
+        }
       } else {
         // Si non, création du pays dans le dictionnaire avec les informations
         countries[countryName] = {
           population: [result.population.value],
-          area: [result.area.value],
           capital: [result.capitalLabel.value],
-          officialLanguage: [result.officialLanguage.value],
-          president: [result.president.value],
-          currency: [result.currency.value]
+          officialLanguage: [result.officialLanguageLabel.value],
+          president: [result.presidentLabel.value],
+          currency: [result.currencyLabel.value]
         };
       }
-    }  
+    }
     return countries;
   }
+     
 
   const [data, setData] = useState();
   async function requete () {
@@ -66,8 +76,9 @@ function App() {
     const headers = { 'Accept': 'application/sparql-results+json' };
     const response = await fetch(fullUrl, { headers });
     const data_aw = await response.json();
-    var tab = test(data_aw)
+    var tab = test(data_aw)   
     setData(tab);    
+ 
     console.log(tab)
   }
   
