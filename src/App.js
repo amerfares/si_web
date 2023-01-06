@@ -77,8 +77,6 @@ function App() {
     const data_aw = await response.json();
     var tab = dictionnaire(data_aw)   
     setData(tab);    
- 
-    console.log(tab)
   }
   
   useEffect(() => {   
@@ -87,8 +85,8 @@ function App() {
 , []);
 
 return (
-
-  <div id="chartDiv">{data ? <Chart data={data}/>:'Loading...'}</div>
+<div id="container"><h1 id="title">World Country Information</h1>
+  <div id="chartDiv">{data ? <Chart data={data}/>:'Loading...'}</div></div>
 );
   }
 

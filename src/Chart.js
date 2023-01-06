@@ -4,6 +4,7 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow"
 import * as am5map from "@amcharts/amcharts5/map";
 import am5geodata_data_countries from "@amcharts/amcharts5-geodata/data/countries2";
+import './Chart.css'
 
 
 function Chart(params) {
@@ -74,13 +75,40 @@ function Chart(params) {
             }
             if (target.get("active")) {
                 selectCountry(target.dataItem.get("id"));
-                console.log(params.data, am5geodata_data_countries)
                 setCountry(am5geodata_data_countries[target.dataItem.get("id")].country)
-                setCapital(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].capital)
-                setPresident(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].president)
-                setOfficialLanguage(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].officialLanguage)
-                setPopulation(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].population)
-                setCurrency(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].currency)
+                if (params.data[am5geodata_data_countries[target.dataItem.get("id")].country]){
+                    setCapital(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].capital.join(", "))
+                    setPresident(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].president)
+                    setOfficialLanguage(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].officialLanguage.join(", "))
+                    setPopulation(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].population)
+                    setCurrency(params.data[am5geodata_data_countries[target.dataItem.get("id")].country].currency.join(", "))
+                } else if (am5geodata_data_countries[target.dataItem.get("id")].country=="Russian Federation") {
+                    setCapital(params.data["Russia"].capital.join(", "))
+                    setPresident(params.data["Russia"].president)
+                    setOfficialLanguage(params.data["Russia"].officialLanguage.join(", "))
+                    setPopulation(params.data["Russia"].population)
+                    setCurrency(params.data["Russia"].currency.join(", "))
+                } else if (am5geodata_data_countries[target.dataItem.get("id")].country=="United States") {
+                    setCapital(params.data["United States of America"].capital.join(", "))
+                    setPresident(params.data["United States of America"].president)
+                    setOfficialLanguage(params.data["United States of America"].officialLanguage.join(", "))
+                    setPopulation(params.data["United States of America"].population)
+                    setCurrency(params.data["United States of America"].currency.join(", "))
+                } else if (am5geodata_data_countries[target.dataItem.get("id")].country=="China") {
+                    setCapital(params.data["People's Republic of China"].capital.join(", "))
+                    setPresident(params.data["People's Republic of China"].president)
+                    setOfficialLanguage(params.data["People's Republic of China"].officialLanguage.join(", "))
+                    setPopulation(params.data["People's Republic of China"].population)
+                    setCurrency(params.data["People's Republic of China"].currency.join(", "))
+                } else {
+                    setCapital("no data for this country")
+                    setPresident("no data for this country")
+                    setOfficialLanguage("no data for this country")
+                    setPopulation("no data for this country")
+                    setCurrency("no data for this country")
+                }
+                
+                
             }
             previousPolygon = target;
         });
@@ -102,7 +130,7 @@ function Chart(params) {
   }, []);
 
   return <>
-    <div id="container">
+    <div id="info_container">
         <div id="country">
             <p>Country: {country}</p>
         </div>
